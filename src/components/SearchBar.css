@@ -1,0 +1,22 @@
+.SearchBar {
+  display: flex;
+}
+
+.Search-input {
+  display: inline-block;
+  font-size: 12px;
+  width: 250px;
+  height: 26px;
+  padding: 4px;
+  outline: none;
+}
+
+.Search-button {
+  width: 80px;
+  background-color: yellowgreen;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+  outline: none;
+}
