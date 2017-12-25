@@ -6,7 +6,6 @@ class SearchBar extends Component {
     return (
       <span className="SearchBar">
         <input className="Search-input" type="text" placeholder="Search by Movie title" onChange={this.props.onInputChange}/>
-        <button className="Search-button" onClick={this.props.searchHandler}>GO</button>
       </span>
     );
   }
