@@ -5,15 +5,22 @@ import NoMovieFound from './NoMovieFound.js';
 
 class MovieList extends Component {
   render() {
+    let hasMovie = false;
+    let comp = movies.map((movie) => {
+      if (movie.title.includes(this.props.searchValue)) {
+        hasMovie = true;
+        return <p key={movie.id}>{movie.title}</p>  
+      }
+      return null;
+    });
+
+    if (!hasMovie) {
+      comp = <NoMovieFound />;
+    }
+
     return (
       <div className="MovieList">
-        {movies.map((movie) => {
-          if (movie.title.includes(this.props.searchValue)) {
-            return <p key={movie.id}>{movie.title}</p>  
-          } else {
-            return null;
-          }
-        })}
+        {comp}
       </div>
     );
   }
