@@ -20,3 +20,9 @@
   font-size: large;
 }
 
+.App-movies-container {
+  padding: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
