@@ -11,7 +11,6 @@ class MovieListEntry extends Component {
   }
 
   clickHandle() {
-    console.log('clicked');
     this.setState({shouldDisplayInfo: !this.state.shouldDisplayInfo});
   }
 
