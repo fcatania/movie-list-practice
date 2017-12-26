@@ -1,6 +1,6 @@
 .SearchBar {
-  display: flex;
   padding-top: 8px;
+  float: right;
 }
 
 .Search-input {

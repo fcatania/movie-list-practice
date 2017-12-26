@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-header {
@@ -26,3 +26,31 @@
   padding-right: 40px;
 }
 
+.App-tab-container {
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.App-tab-button {
+  margin-right: 1px;
+  display: inline-block;
+  float: left;
+  height: 45px;
+  width: 100px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  border-color: grey;
+  border-width: 0.5px;
+  border-bottom: 0px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-color: white;
+  color: black;
+}
+
+.App-tab-button.selected {
+  background-color: yellowgreen;
+  color: white;
+}

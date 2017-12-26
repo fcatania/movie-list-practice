@@ -57,7 +57,11 @@ class App extends Component {
         </header>
         <div className="App-movies-container">
           <AddBar onAddInputChange={this.onAddInputChange} addHandler={this.addMovie} addValue={this.state.addValue}/>
-          <SearchBar onSearchInputChange={this.onSearchInputChange}/>
+          <div className="App-tab-container">
+            <button className="App-tab-button selected">ALL MOVIES</button>
+            <button className="App-tab-button">WATCHED</button>
+            <SearchBar onSearchInputChange={this.onSearchInputChange}/>
+          </div>
           {this.state.filteredMovies.length > 0 ? <MovieList movies={this.state.filteredMovies} searchValue={this.state.searchValue}/> : <NoMovieFound />}
         </div>
       </div>

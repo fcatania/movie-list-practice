@@ -1,6 +1,12 @@
 .NoMovie {
   font-size: 22px;
   text-align: left;
+  padding: 12px;
   color: grey;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  outline-color: grey;
+  outline-width: 1px;
+  outline-style: solid;
+  margin: 0px 1px 1px 1px;
+  clear: both;
 }
