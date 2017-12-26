@@ -33,7 +33,7 @@ class App extends Component {
     movieToAdd.desc = 'Some default description for an added movie.';
     currMovies.push(movieToAdd);
     this.setState({movies: currMovies, addValue: ''}, () => {
-      this._filterMovies(this._filterBySearch);
+      this._filterMovies();
     });
   }
 
@@ -44,13 +44,7 @@ class App extends Component {
   // As we type in the search bar we apply a the search filter, in addition to that if we are in the watched tab we also filter with the watched filtering function.
   onSearchInputChange(e) {
     this.setState({searchValue: e.target.value}, () => {
-      if (this.state['all-movies']) {
-        this._filterMovies(this._filterBySearch);
-      } else {
-        this._filterMovies((movie) => {
-          return this._filterBySearch(movie) && this._filterByWatched(movie);
-        });
-      }
+      this._filterMovies();
     });
   }
 
@@ -64,25 +58,30 @@ class App extends Component {
     return movie.watched;
   }
 
-  // Filters movies with a filtering function as input. Basicly the same as .filter but then modifies the state.
-  _filterMovies(filterFunc) {
-    var filteredMovies = this.state.movies.filter(filterFunc);
+  // Filters movies, checking in which tab are we standing and applying the correct filtering functions.
+  _filterMovies() {
+    var filteredMovies;
+    if (this.state['all-movies']) {
+      filteredMovies = this.state.movies.filter(this._filterBySearch);
+    } else {
+      filteredMovies = this.state.movies.filter((movie) => {
+        return this._filterBySearch(movie) && this._filterByWatched(movie);
+      });
+    }
     this.setState({filteredMovies: filteredMovies});
   }
 
-  // Set all-movies true and watched-movies false, then filter by the search value.
+  // Set all-movies true and watched-movies false, then filter movies.
   onClickTabAll(e) {
     this.setState({'all-movies': true, 'watched-movies': false}, () => {
-      this._filterMovies(this._filterBySearch);
+      this._filterMovies();
     });
   }
 
-  // Set all-movies false and watched-movies true, then filter by the search value and by watched.
+  // Set all-movies false and watched-movies true, then filter movies.
   onClickTabWatched(e) {
     this.setState({'all-movies': false, 'watched-movies': true}, () => {
-      this._filterMovies((movie) => {
-        return this._filterByWatched(movie) && this._filterBySearch(movie);
-      });
+      this._filterMovies();
     });
   }
 
