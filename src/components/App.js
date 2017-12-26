@@ -4,6 +4,7 @@ import MovieList from './MovieList.js';
 import SearchBar from './SearchBar.js';
 import AddBar from './AddBar.js';
 import movies from '../DummyData.js';
+import NoMovieFound from './NoMovieFound';
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class App extends Component {
     this.state = {
       searchValue: '',
       addValue: '',
-      movies: movies
+      movies: movies,
+      filteredMovies: movies
     };
     this.onSearchInputChange = this.onSearchInputChange.bind(this);
     this.onAddInputChange = this.onAddInputChange.bind(this);
@@ -25,8 +27,9 @@ class App extends Component {
     movieToAdd.title = this.state.addValue;
     movieToAdd.desc = 'Some default description for an added movie.';
     currMovies.push(movieToAdd);
-    this.setState({movies: currMovies});
-    this.setState({addValue: ''});
+    this.setState({movies: currMovies, addValue: ''}, () => {
+      this._filterMovies();
+    });
   }
 
   onAddInputChange(e) {
@@ -34,7 +37,16 @@ class App extends Component {
   }
 
   onSearchInputChange(e) {
-    this.setState({searchValue: e.target.value});
+    this.setState({searchValue: e.target.value}, () => {
+      this._filterMovies();
+    });
+  }
+
+  _filterMovies() {
+    var filteredMovies = this.state.movies.filter((movie) => {
+      return movie.title.includes(this.state.searchValue);
+    });
+    this.setState({filteredMovies: filteredMovies});
   }
 
   render() {
@@ -46,7 +58,7 @@ class App extends Component {
         <div className="App-movies-container">
           <AddBar onAddInputChange={this.onAddInputChange} addHandler={this.addMovie} addValue={this.state.addValue}/>
           <SearchBar onSearchInputChange={this.onSearchInputChange}/>
-          <MovieList movies={this.state.movies} searchValue={this.state.searchValue}/>
+          {this.state.filteredMovies.length > 0 ? <MovieList movies={this.state.filteredMovies} searchValue={this.state.searchValue}/> : <NoMovieFound />}
         </div>
       </div>
     );
