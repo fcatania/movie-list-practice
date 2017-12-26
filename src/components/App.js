@@ -20,6 +20,7 @@ class App extends Component {
     this.onSearchInputChange = this.onSearchInputChange.bind(this);
     this.onAddInputChange = this.onAddInputChange.bind(this);
     this.addMovie = this.addMovie.bind(this);
+    this.watchMovie = this.watchMovie.bind(this);
     this.onClickTabAll = this.onClickTabAll.bind(this);
     this.onClickTabWatched = this.onClickTabWatched.bind(this);
     this._filterBySearch = this._filterBySearch.bind(this);
@@ -28,12 +29,19 @@ class App extends Component {
   addMovie() {
     var movieToAdd = {};
     var currMovies = this.state.movies.slice();
-    movieToAdd.id = currMovies[currMovies.length - 1].id + 1;
     movieToAdd.title = this.state.addValue;
     movieToAdd.desc = 'Some default description for an added movie.';
     movieToAdd.watched = false;
     currMovies.push(movieToAdd);
     this.setState({movies: currMovies, addValue: ''}, () => {
+      this._filterMovies();
+    });
+  }
+
+  watchMovie(index) {
+    var currMovies = this.state.filteredMovies.slice();
+    currMovies[index].watched = !currMovies[index].watched;
+    this.setState({filteredMovies: currMovies}, () => {
       this._filterMovies();
     });
   }
@@ -68,6 +76,7 @@ class App extends Component {
       filteredMovies = this.state.movies.filter((movie) => {
         return this._filterBySearch(movie) && this._filterByWatched(movie);
       });
+      
     }
     this.setState({filteredMovies: filteredMovies});
   }
@@ -99,7 +108,7 @@ class App extends Component {
             <button id="watched-movies" className={"App-tab-button " + (this.state['watched-movies'] ? "selected" : "")} onClick={this.onClickTabWatched}>WATCHED</button>
             <SearchBar onSearchInputChange={this.onSearchInputChange}/>
           </div>
-          {this.state.filteredMovies.length > 0 ? <MovieList movies={this.state.filteredMovies} searchValue={this.state.searchValue}/> : <NoMovieFound />}
+          {this.state.filteredMovies.length > 0 ? <MovieList movies={this.state.filteredMovies} searchValue={this.state.searchValue} clickWatch={this.watchMovie}/> : <NoMovieFound />}
         </div>
       </div>
     );
