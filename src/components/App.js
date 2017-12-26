@@ -31,6 +31,7 @@ class App extends Component {
     movieToAdd.id = currMovies[currMovies.length - 1].id + 1;
     movieToAdd.title = this.state.addValue;
     movieToAdd.desc = 'Some default description for an added movie.';
+    movieToAdd.watched = false;
     currMovies.push(movieToAdd);
     this.setState({movies: currMovies, addValue: ''}, () => {
       this._filterMovies();
