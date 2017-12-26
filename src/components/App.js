@@ -19,7 +19,6 @@ class App extends Component {
   }
 
   addMovie() {
-    console.log(this.state.addValue);
     var movieToAdd = {};
     var currMovies = this.state.movies.slice();
     movieToAdd.id = currMovies[currMovies.length - 1].id + 1;
@@ -27,7 +26,6 @@ class App extends Component {
     movieToAdd.desc = 'Some default description for an added movie.';
     currMovies.push(movieToAdd);
     this.setState({movies: currMovies});
-    console.log(currMovies);
     this.setState({addValue: ''});
   }
 
