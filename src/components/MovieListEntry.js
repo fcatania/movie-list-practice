@@ -10,6 +10,10 @@ class MovieListEntry extends Component {
     this.clickHandle = this.clickHandle.bind(this);
   }
 
+  componentWillReceiveProps() {
+    this.setState({shouldDisplayInfo: false});
+  }
+
   clickHandle() {
     this.setState({shouldDisplayInfo: !this.state.shouldDisplayInfo});
   }
