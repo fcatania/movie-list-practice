@@ -41,6 +41,7 @@ class App extends Component {
   }
 
   // TODO: Move API key to a safer place. (although too late mate)
+  // TODO: This function should just make a post request to my server, and the server should get from TMDB.
   addMovie() {
     if (this.state.addValue === '') {
       return;
