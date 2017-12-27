@@ -53,7 +53,6 @@ class App extends Component {
       }
     }).then((json) => {
       if (json.results.length !== 0) {
-        console.log(json);
         var firstMovieReceived = json.results[0];
         var movieToAdd = {};
         movieToAdd.title = firstMovieReceived.title;
@@ -73,7 +72,6 @@ class App extends Component {
         };
         fetch('http://127.0.0.1:8080/api/movies', myInit).then((response) => {
           if (response.ok) {
-            console.log('Movie added successfully');
             var currMovies = this.state.movies.slice();
             currMovies.push(movieToAdd);
             this.setState({movies: currMovies, addValue: ''}, () => {
@@ -97,7 +95,6 @@ class App extends Component {
     };
     fetch('http://127.0.0.1:8080/api/movies/' + movieId, myInit).then((response) => {
       if (response.ok) {
-        console.log('Movie updated successfully');
         var currMovies = this.state.filteredMovies.slice();
         currMovies[index].watched = !currMovies[index].watched;
         this.setState({filteredMovies: currMovies}, () => {
