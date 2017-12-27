@@ -3,8 +3,8 @@ import './App.css';
 import MovieList from './MovieList.js';
 import SearchBar from './SearchBar.js';
 import AddBar from './AddBar.js';
-import movies from '../DummyData.js';
 import NoMovieFound from './NoMovieFound';
+import 'whatwg-fetch';
 
 class App extends Component {
   constructor(props) {
@@ -12,8 +12,8 @@ class App extends Component {
     this.state = {
       searchValue: '',
       addValue: '',
-      movies: movies,
-      filteredMovies: movies,
+      movies: [],
+      filteredMovies: [],
       'all-movies': true,
       'watched-movies': false
     };
@@ -27,14 +27,29 @@ class App extends Component {
   }
 
   addMovie() {
-    var movieToAdd = {};
-    var currMovies = this.state.movies.slice();
-    movieToAdd.title = this.state.addValue;
-    movieToAdd.desc = 'Some default description for an added movie.';
-    movieToAdd.watched = false;
-    currMovies.push(movieToAdd);
-    this.setState({movies: currMovies, addValue: ''}, () => {
-      this._filterMovies();
+    if (this.state.addValue === '') {
+      return;
+    }
+    // TODO: Move API key to a safer place.
+    fetch(`https://api.themoviedb.org/3/search/movie?api_key=de81188f6fe49b0287434a98e937f871&query=${this.state.addValue}`).then((response) => {
+      return response.json();
+    }).then((json) => {
+      var firstMovieReceived = json.results[0];
+      var movieToAdd = {};
+      movieToAdd.title = firstMovieReceived.title;
+      movieToAdd.desc = firstMovieReceived.overview;
+      movieToAdd.id = firstMovieReceived.id;
+      movieToAdd.release_date = firstMovieReceived.release_date;
+      movieToAdd.vote_average = firstMovieReceived.vote_average;
+      movieToAdd.watched = false;
+      var currMovies = this.state.movies.slice();
+      currMovies.push(movieToAdd);
+      this.setState({movies: currMovies, addValue: ''}, () => {
+        this._filterMovies();
+      });
+    }).catch((err) => {
+      console.log('TMDB Movie fetch failed.');
+      console.error(err);
     });
   }
 
