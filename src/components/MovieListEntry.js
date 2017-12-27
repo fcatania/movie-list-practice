@@ -28,7 +28,7 @@ class MovieListEntry extends Component {
         <h3 className="MovieListEntry-title">{this.props.movie.title}</h3>
         <h5 className="MovieListEntry-desc">{this.props.movie.desc}</h5>
         <h6 className="MovieListEntry-watched">Watched:</h6>
-        <input id="watched-checkbox" type="checkbox" checked={this.props.movie.watched ? 1 : 0} onChange={() => {this.props.clickWatch(this.props.index)}}/>
+        <input id="watched-checkbox" type="checkbox" checked={this.props.movie.watched ? 1 : 0} onChange={() => {this.props.clickWatch(this.props.index, this.props.movie.id)}}/>
         {this.state.shouldDisplayInfo ? 
           <div>
             <h6 className="MovieListEntry-info"><b>Release Date:</b> {this.props.movie.release_date}</h6>

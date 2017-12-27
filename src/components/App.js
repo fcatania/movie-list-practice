@@ -26,38 +26,86 @@ class App extends Component {
     this._filterBySearch = this._filterBySearch.bind(this);
   }
 
+  componentDidMount() {
+    fetch('http://127.0.0.1:8080/api/movies').then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error, server GET request failed.');
+      }
+    }).then((json) => {
+      this.setState({movies: json}, () => {
+        this._filterMovies();
+      });
+    });
+  }
+
+  // TODO: Move API key to a safer place. (although too late mate)
   addMovie() {
     if (this.state.addValue === '') {
       return;
     }
-    // TODO: Move API key to a safer place.
     fetch(`https://api.themoviedb.org/3/search/movie?api_key=de81188f6fe49b0287434a98e937f871&query=${this.state.addValue}`).then((response) => {
-      return response.json();
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error, TMDB fetch failed.');
+      }
     }).then((json) => {
-      var firstMovieReceived = json.results[0];
-      var movieToAdd = {};
-      movieToAdd.title = firstMovieReceived.title;
-      movieToAdd.desc = firstMovieReceived.overview;
-      movieToAdd.id = firstMovieReceived.id;
-      movieToAdd.release_date = firstMovieReceived.release_date;
-      movieToAdd.vote_average = firstMovieReceived.vote_average;
-      movieToAdd.watched = false;
-      var currMovies = this.state.movies.slice();
-      currMovies.push(movieToAdd);
-      this.setState({movies: currMovies, addValue: ''}, () => {
-        this._filterMovies();
-      });
-    }).catch((err) => {
-      console.log('TMDB Movie fetch failed.');
-      console.error(err);
+      if (json.results.length !== 0) {
+        console.log(json);
+        var firstMovieReceived = json.results[0];
+        var movieToAdd = {};
+        movieToAdd.title = firstMovieReceived.title;
+        movieToAdd.desc = firstMovieReceived.overview;
+        movieToAdd.id = firstMovieReceived.id;
+        movieToAdd.release_date = firstMovieReceived.release_date;
+        movieToAdd.vote_average = firstMovieReceived.vote_average;
+        movieToAdd.watched = false;
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        var myInit = {
+          method: 'POST',
+          headers: myHeaders,
+          mode: 'cors',
+          cache: 'default',
+          body: JSON.stringify(movieToAdd)
+        };
+        fetch('http://127.0.0.1:8080/api/movies', myInit).then((response) => {
+          if (response.ok) {
+            console.log('Movie added successfully');
+            var currMovies = this.state.movies.slice();
+            currMovies.push(movieToAdd);
+            this.setState({movies: currMovies, addValue: ''}, () => {
+              this._filterMovies();
+            });
+          } else {
+            console.error('POST FAILED. Movie was not added successfully');
+          }
+        });
+      }
     });
   }
 
-  watchMovie(index) {
-    var currMovies = this.state.filteredMovies.slice();
-    currMovies[index].watched = !currMovies[index].watched;
-    this.setState({filteredMovies: currMovies}, () => {
-      this._filterMovies();
+  watchMovie(index, movieId) {
+    var myHeaders = new Headers();
+    var myInit = {
+      method: 'PUT',
+      headers: myHeaders,
+      mode: 'cors',
+      cache: 'default'
+    };
+    fetch('http://127.0.0.1:8080/api/movies/' + movieId, myInit).then((response) => {
+      if (response.ok) {
+        console.log('Movie updated successfully');
+        var currMovies = this.state.filteredMovies.slice();
+        currMovies[index].watched = !currMovies[index].watched;
+        this.setState({filteredMovies: currMovies}, () => {
+          this._filterMovies();
+        });
+      } else {
+        console.error('PUT FAILED. Movie was not updated successfully');
+      }
     });
   }
 
