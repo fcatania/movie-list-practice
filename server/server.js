@@ -8,7 +8,7 @@ const db = require('../database/schema.js');
 const app = express();
 
 // TODO: serve static files.
-// app.use(express.static('../public'));
+app.use(express.static('../build'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
