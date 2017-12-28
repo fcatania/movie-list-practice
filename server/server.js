@@ -2,6 +2,7 @@ const express = require('express');
 const movies = require('./moviesHolder.js');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const db = require('../database/schema.js');
 
 
 const app = express();
@@ -14,32 +15,26 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/api/movies', function(req, res) {
-  res.json(movies);
+  db.Movie.findAll().then((movies) => {
+    res.json(movies);
+  });
 });
 
 app.post('/api/movies', function(req, res) {
   console.log('request body received: ' + req.body);
-  movies.push(req.body);
+  db.Movie.create(req.body);
   res.send('POST successful');
 });
 
 app.put('/api/movies/:id', function(req, res) {
-  console.log('PUT request received');
-  let foundFlag = false;
-  movies.forEach((movie) => {
-    if (JSON.stringify(movie.id) === req.params.id){
-      foundFlag = true;
-      console.log('movie found');
-      movie.watched = !movie.watched;
-      // res.send('PUT Successful');
-      return;
+  db.Movie.find({where: {id: req.params.id}}).then((movie) => {
+    if (movie) {
+      movie.updateAttributes({watched: !movie.watched});
+      res.send('PUT Successful');
+    } else {
+      res.status(404).send('Error, movie with id not found.');
     }
   });
-  if (!foundFlag) {
-    res.status(404).send('Error, movie with id not found.');  
-  } else {
-    res.send('PUT Successful');
-  }
 });
 
 app.listen(8080, () => console.log('Example app listening on port 8080!'));
